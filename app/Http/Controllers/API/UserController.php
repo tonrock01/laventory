@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\User\RegisterUserRequest;
+use App\Models\User;
+use App\Services\UserService;
+use Illuminate\Http\Request;
+
+class UserController extends Controller
+{
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
+    /**
+     * Create a user | เพิ่มผู้ใช้งาน
+     */
+    public function register(RegisterUserRequest $request)
+    {
+        $data = $this->userService->store($request->all());
+        return response()->json([
+            'data' => $data,
+            'message' => 'User created.'
+        ], 201);
+    }
+
+    public function index(Request $request) {
+        $data = User::paginate(10);
+        
+        return response()->json([
+            'success' => true,
+            'data' => $data,
+        ], 201);
+    }
+}
