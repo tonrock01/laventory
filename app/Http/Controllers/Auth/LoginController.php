@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
+    /**
+     * Login
+     */
     public function login(LoginRequest $request)
     {
         $user = User::where('email', $request->email)->first();
