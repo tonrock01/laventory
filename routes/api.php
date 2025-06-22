@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
@@ -23,14 +24,13 @@ Route::middleware('guest')->group(function () {
     Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
     Route::get('/reset-password/{token}', [ResetPasswordController::class, 'checkExpiredToken'])->name('password.reset');
     Route::post('/reset-password', [ResetPasswordController::class, 'reset']);
-
 });
 
 /*
-    |--------------------------------------------------------------------------
-    | Routes for verify email
-    |--------------------------------------------------------------------------
-    */
+|--------------------------------------------------------------------------
+| Routes for verify email
+|--------------------------------------------------------------------------
+*/
 Route::get('/email/verify/{id}/{hash}', [RegisterController::class, 'verify'])->middleware(['signed'])->name('verification.verify');
 
 
@@ -40,14 +40,18 @@ Route::middleware('auth:api')->group(function () {
     | Routes for verify email
     |--------------------------------------------------------------------------
     */
-    Route::get('/email/verify', function () {
-        return view('auth.verify-email');
-    })->name('verification.notice');
     Route::post('/email/verification-notification', function (Request $request) {
         $request->user()->sendEmailVerificationNotification();
-
-        return back()->with('message', 'Verification link sent!');
+        return response()->json(['message' => 'Verification link sent!']);
     })->middleware(['throttle:6,1'])->name('verification.send');
 
     Route::get('/user', [UserController::class, 'index']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Routes for role
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/role', [RoleController::class, 'index']);
+    Route::post('/assign-role/{userId}', [RoleController::class, 'assignRole']);
 });
