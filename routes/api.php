@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -54,4 +55,15 @@ Route::middleware('auth:api')->group(function () {
     */
     Route::get('/role', [RoleController::class, 'index']);
     Route::post('/assign-role/{userId}', [RoleController::class, 'assignRole']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Routes for category
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/category', [CategoryController::class, 'index']);
+    Route::post('/category', [CategoryController::class, 'store']);
+    Route::get('/category/{category}', [CategoryController::class, 'show']);
+    Route::put('/category/{category}', [CategoryController::class, 'update']);
+    Route::delete('/category/{category}', [CategoryController::class, 'destroy']);  
 });
