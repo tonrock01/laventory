@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -36,6 +37,9 @@ Route::get('/email/verify/{id}/{hash}', [RegisterController::class, 'verify'])->
 
 
 Route::middleware('auth:api')->group(function () {
+    Route::post('/change-password', [UserController::class, 'changePassword']);
+    Route::post('/logout', [LoginController::class, 'logout']);
+
     /*
     |--------------------------------------------------------------------------
     | Routes for verify email
@@ -65,5 +69,16 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/category', [CategoryController::class, 'store']);
     Route::get('/category/{category}', [CategoryController::class, 'show']);
     Route::put('/category/{category}', [CategoryController::class, 'update']);
-    Route::delete('/category/{category}', [CategoryController::class, 'destroy']);  
+    Route::delete('/category/{category}', [CategoryController::class, 'destroy']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Routes for product
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/product', [ProductController::class, 'index']);
+    Route::post('/product', [ProductController::class, 'store']);
+    Route::get('/product/{product}', [ProductController::class, 'show']);
+    Route::put('/product/{product}', [ProductController::class, 'update']);
+    Route::delete('/product/{product}', [ProductController::class, 'destroy']);
 });

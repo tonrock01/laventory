@@ -3,63 +3,88 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
+use App\Models\Product;
+use App\Services\ProductService;
+use Dedoc\Scramble\Attributes\QueryParameter;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    protected $productService;
+
+    public function __construct(ProductService $productService)
     {
-        //
+        $this->productService = $productService;
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the product.
      */
-    public function create()
+    #[QueryParameter('search', description: 'search by using name', type: 'string', example: "Milk")]
+    #[QueryParameter('page', description: 'page', type: 'string', example: "2")]
+    #[QueryParameter('per_page', description: 'per page', type: 'string', example: "5")]
+    public function index(Request $request)
     {
-        //
+        $data = $this->productService->index($request->all());
+        return response()->json([
+            'success' => true,
+            'message' => 'Success',
+            'data' => $data
+        ], 200);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created product.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        //
+        $data = $this->productService->store($request->all());
+        return response()->json([
+            'success' => true,
+            'message' => 'Success',
+            'data' => $data
+        ], 201);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified product.
      */
-    public function show(string $id)
+    public function show(Product $product)
     {
-        //
+        return response()->json([
+            'success' => true,
+            'message' => 'Success',
+            'data' => $product
+        ], 200);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified product.
      */
-    public function edit(string $id)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $product->update($request->all());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Success',
+            'data' => $product
+        ], 200);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Remove the specified product.
      */
-    public function update(Request $request, string $id)
+    public function destroy(Product $product)
     {
-        //
-    }
+        $product->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json([
+            'success' => true,
+            'message' => 'Success',
+            'data' => $product
+        ], 200);
     }
 }

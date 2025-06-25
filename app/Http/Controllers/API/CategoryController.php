@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Category\CreateCategoryRequest;
+use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Services\CategoryService;
@@ -20,7 +20,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the category.
      */
     #[QueryParameter('search', description: 'search by using name', type: 'string', example: "Electronics, Groceries, Clothing")]
     #[QueryParameter('page', description: 'page', type: 'string', example: "2")]
@@ -36,9 +36,9 @@ class CategoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created category.
      */
-    public function store(CreateCategoryRequest $request)
+    public function store(StoreCategoryRequest $request)
     {
         $data = $this->categoryService->store($request->all());
         return response()->json([
@@ -49,7 +49,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified category.
      */
     public function show(Category $category)
     {
@@ -61,7 +61,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified category.
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
@@ -75,7 +75,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified category.
      */
     public function destroy(Category $category)
     {

@@ -19,14 +19,14 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255)->unique();
-            $table->unsignedBigInteger('category_id');
+            $table->foreignId('category_id')->constrained('categories');
             $table->integer('stock');
             $table->integer('min_stock')->nullable();
             $table->decimal('cost_price', 10, 2);
             $table->decimal('sale_price', 10, 2);
+            $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('updated_by')->constrained('users');
             $table->timestamps();
-
-            $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 

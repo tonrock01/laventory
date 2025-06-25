@@ -13,15 +13,13 @@ return new class extends Migration
     {
         Schema::create('stock_actions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('product_id')->constrained('products');
             $table->enum('action_type', ['in', 'out']);
             $table->integer('quantity');
             $table->string('reason', 255)->nullable();
+            $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('updated_by')->constrained('users');
             $table->timestamps();
-
-            $table->foreign('product_id')->references('id')->on('products');
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
