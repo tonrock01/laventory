@@ -22,7 +22,7 @@ class UpdateProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string|max:255|unique:products,name',
+            'name' => 'string|max:255',
             'category_id' => 'integer|exists:categories,id',
             'stock' => 'integer',
             'min_stock' => 'integer',
@@ -38,6 +38,12 @@ class UpdateProductRequest extends FormRequest
              * @example 15.00
              */
             'sale_price' => 'decimal:2',
+            /**
+             * Send to check data version
+             * @var integer
+             * @example 1
+             */
+            'version' => 'required|integer'
         ];
     }
 }

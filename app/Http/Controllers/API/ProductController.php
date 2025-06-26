@@ -7,11 +7,14 @@ use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Product;
 use App\Services\ProductService;
+use App\Traits\VersioningControllerTrait;
 use Dedoc\Scramble\Attributes\QueryParameter;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    use VersioningControllerTrait;
+    
     protected $productService;
 
     public function __construct(ProductService $productService)
@@ -65,6 +68,11 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
+        // check version
+        if ($error = $this->checkVersion($product, $request->version)) {
+            return $error;
+        }
+
         $product->update($request->all());
 
         return response()->json([

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('min_stock')->nullable();
             $table->decimal('cost_price', 10, 2);
             $table->decimal('sale_price', 10, 2);
+            $table->unsignedInteger('version')->default(1);
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');
             $table->timestamps();

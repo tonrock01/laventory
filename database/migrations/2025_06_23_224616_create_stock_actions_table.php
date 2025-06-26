@@ -17,6 +17,7 @@ return new class extends Migration
             $table->enum('action_type', ['in', 'out']);
             $table->integer('quantity');
             $table->string('reason', 255)->nullable();
+            $table->unsignedInteger('version')->default(1);
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');
             $table->timestamps();

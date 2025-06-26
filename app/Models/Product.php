@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Traits\CreatedUpdatedBy;
+use App\Traits\HasVersioning;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
-    use CreatedUpdatedBy;
+    use CreatedUpdatedBy, HasVersioning;
 
     protected $fillable = [
         'name',
@@ -16,7 +17,8 @@ class Product extends Model
         'stock',
         'min_stock',
         'cost_price',
-        'sale_price'
+        'sale_price',
+        'version'
     ];
 
     public function category(): BelongsTo
