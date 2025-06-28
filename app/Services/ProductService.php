@@ -17,4 +17,9 @@ class ProductService
     {
         return $data = Product::create($product);
     }
+
+    public function findProduct($id)
+    {
+        return Product::findOrFail($id);
+    }
 }

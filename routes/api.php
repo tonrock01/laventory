@@ -3,15 +3,12 @@
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RoleController;
+use App\Http\Controllers\API\StockLogController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Models\User;
-use App\Services\RegisterService;
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -81,4 +78,14 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/product/{product}', [ProductController::class, 'show']);
     Route::put('/product/{product}', [ProductController::class, 'update']);
     Route::delete('/product/{product}', [ProductController::class, 'destroy']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Routes for stock_log
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/stock-log', [StockLogController::class, 'index']);
+    Route::post('/stock/in', [StockLogController::class, 'stockIn']);
+    Route::post('/stock/out', [StockLogController::class, 'stockOut']);
+    Route::get('/product/{product}/stock-log', [StockLogController::class, 'productLogs']);
 });

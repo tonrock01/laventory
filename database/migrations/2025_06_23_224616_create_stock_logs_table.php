@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stock_actions', function (Blueprint $table) {
+        Schema::create('stock_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained('products');
-            $table->enum('action_type', ['in', 'out']);
+            $table->tinyInteger('action_type')->comment('1 - stock in , 2 - stock out');
             $table->integer('quantity');
             $table->string('reason', 255)->nullable();
             $table->unsignedInteger('version')->default(1);
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stock_actions');
+        Schema::dropIfExists('stock_logs');
     }
 };

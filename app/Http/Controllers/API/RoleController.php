@@ -7,9 +7,6 @@ use App\Http\Requests\Role\AssignRoleRequest;
 use App\Models\User;
 use App\Services\RoleService;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
-
-use function Pest\Laravel\json;
 
 class RoleController extends Controller
 {
