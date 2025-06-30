@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Filters\StockLogsFilter;
 use App\Traits\CreatedUpdatedBy;
 use App\Traits\HasVersioning;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -26,5 +28,10 @@ class StockLog extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function scopeFilter(Builder $query, array $filters): Builder
+    {
+        return (new StockLogsFilter($filters))->apply($query);
     }
 }

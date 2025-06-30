@@ -32,16 +32,16 @@ class RoleController extends Controller
     {
         $data = $this->roleService->assignRole($request->all(), $userId);
 
-        if ($data) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Assign role success'
-            ], 200);
-        } else {
+        if (!$data) {
             return response()->json([
                 'success' => false,
                 'message' => 'Assign role failed'
             ], 200);
         }
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Assign role success'
+        ], 200);
     }
 }

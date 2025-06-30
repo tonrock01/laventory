@@ -8,9 +8,8 @@ class ProductService
 {
     public function index(array $filters = [])
     {
-        $search = $filters['search'] ?? null;
         $per_page = $filters['per_page'] ?? 10;
-        return Product::where('name', 'like', "%{$search}%")->latest()->paginate($per_page);
+        return Product::filter($filters)->latest()->paginate($per_page);
     }
 
     public function store(array $product)

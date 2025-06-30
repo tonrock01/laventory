@@ -9,11 +9,8 @@ class StockLogService
 {
     public function index(array $filters = [])
     {
-        $search = $filters['search'] ?? null;
         $per_page = $filters['per_page'] ?? 10;
-        return StockLog::with('product')->whereHas('product', function ($query) use ($search) {
-            $query->where('name', 'like', "%{$search}%");
-        })->latest()->paginate($per_page);
+        return StockLog::filter($filters)->with('product')->latest()->paginate($per_page);
     }
 
     public function stockIn(array $request, Product $product)
@@ -51,8 +48,6 @@ class StockLogService
     public function productLogs(array $request, Product $product)
     {
         $per_page = $request['per_page'] ?? null;
-        return Product::with(['stockLogs' => function ($query) {
-            $query->latest();
-        }])->where('id', $product->id)->paginate($per_page);
+        return StockLog::where('product_id', $product->id)->latest()->paginate($per_page);
     }
 }

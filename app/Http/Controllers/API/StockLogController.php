@@ -27,6 +27,9 @@ class StockLogController extends Controller
      * Display a listing of the stock logs.
      */
     #[QueryParameter('search', description: 'search by using name', type: 'string', example: "Milk")]
+    #[QueryParameter('action_type', description: 'search by action_type 1 = in, 2 = out', type: 'integer', example: 1)]
+    #[QueryParameter('start_date', description: 'search by date', type: 'string', example: "2025-6-25")]
+    #[QueryParameter('end_date', description: 'search by date', type: 'string', example: "2025-6-25")]
     #[QueryParameter('page', description: 'page', type: 'string', example: "2")]
     #[QueryParameter('per_page', description: 'per page', type: 'string', example: "5")]
     public function index(Request $request)
@@ -49,10 +52,6 @@ class StockLogController extends Controller
         // check version
         if ($error = $this->checkVersion($product, $request->product_version)) {
             return $error;
-            // return response()->json([
-            //     'success' => false,
-            //     'message' => $error,
-            // ], 400);
         }
 
         $data = $this->stockLogService->stockIn($request->all(), $product);
@@ -74,10 +73,6 @@ class StockLogController extends Controller
         // check version
         if ($error = $this->checkVersion($product, $request->product_version)) {
             return $error;
-            // return response()->json([
-            //     'success' => false,
-            //     'message' => $error,
-            // ], 400);
         }
 
         $data = $this->stockLogService->stockOut($request->all(), $product);
@@ -102,6 +97,6 @@ class StockLogController extends Controller
             'success' => true,
             'message' => 'Success',
             'data' => $data
-        ], 201);
+        ], 200);
     }
 }

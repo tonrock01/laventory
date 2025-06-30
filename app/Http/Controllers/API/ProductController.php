@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     use VersioningControllerTrait;
-    
+
     protected $productService;
 
     public function __construct(ProductService $productService)
@@ -44,6 +44,7 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $data = $this->productService->store($request->all());
+        
         return response()->json([
             'success' => true,
             'message' => 'Success',

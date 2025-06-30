@@ -41,6 +41,7 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $data = $this->categoryService->store($request->all());
+        
         return response()->json([
             'success' => true,
             'message' => 'Success',
