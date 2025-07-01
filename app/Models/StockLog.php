@@ -7,7 +7,6 @@ use App\Traits\CreatedUpdatedBy;
 use App\Traits\HasVersioning;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class StockLog extends Model
 {
@@ -25,7 +24,12 @@ class StockLog extends Model
         'version'
     ];
 
-    public function product(): BelongsTo
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
     }

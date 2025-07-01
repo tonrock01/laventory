@@ -7,6 +7,7 @@ use App\Http\Requests\StockLog\StockInOutRequest;
 use App\Models\Product;
 use App\Services\ProductService;
 use App\Services\StockLogService;
+use App\Services\TelegramService;
 use App\Traits\VersioningControllerTrait;
 use Dedoc\Scramble\Attributes\QueryParameter;
 use Illuminate\Http\Request;
@@ -15,12 +16,13 @@ class StockLogController extends Controller
 {
     use VersioningControllerTrait;
 
-    protected $stockLogService, $productService;
+    protected $stockLogService, $productService, $telegramService;
 
-    public function __construct(StockLogService $stockLogService, ProductService $productService)
+    public function __construct(StockLogService $stockLogService, ProductService $productService, TelegramService $telegramService)
     {
         $this->stockLogService = $stockLogService;
         $this->productService = $productService;
+        $this->telegramService = $telegramService;
     }
 
     /**
@@ -56,6 +58,10 @@ class StockLogController extends Controller
 
         $data = $this->stockLogService->stockIn($request->all(), $product);
 
+        if ($data) {
+            $this->telegramService->notiStockIn($data);
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Success',
@@ -76,6 +82,10 @@ class StockLogController extends Controller
         }
 
         $data = $this->stockLogService->stockOut($request->all(), $product);
+
+        if ($data) {
+            $this->telegramService->notiStockOut($data);
+        }
 
         return response()->json([
             'success' => true,
