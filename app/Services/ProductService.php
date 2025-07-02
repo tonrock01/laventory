@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Jobs\StockNotification;
 use App\Models\Product;
+use App\Models\StockLog;
 
 class ProductService
 {
@@ -14,7 +16,20 @@ class ProductService
 
     public function store(array $product)
     {
-        return $data = Product::create($product);
+        $data = Product::create($product);
+        
+        $stock_log = StockLog::create([
+            'product_id' => $data->id,
+            'action_type' => StockLog::STOCK_IN,
+            'quantity' => $data->stock,
+            'reason' => 'Add new product'
+        ]);
+
+        if ($data && $stock_log) {
+            StockNotification::dispatch($stock_log);
+        }
+
+        return $data;
     }
 
     public function findProduct($id)

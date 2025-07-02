@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Resources\StockLogs\StocklogIndexResource;
+use App\Jobs\StockNotification;
 use App\Models\Product;
 use App\Models\StockLog;
 
@@ -29,8 +30,9 @@ class StockLogService
             'reason' => $request['reason'] ?? null
         ]);
 
-        $data->min_stock = $product->min_stock;
-        $data->stock = $product->stock;
+        if ($data) {
+            StockNotification::dispatch($data);
+        }
 
         return $data;
     }
@@ -52,8 +54,9 @@ class StockLogService
             'reason' => $request['reason'] ?? null
         ]);
 
-        $data->min_stock = $product->min_stock;
-        $data->stock = $product->stock;
+        if ($data) {
+            StockNotification::dispatch($data);
+        }
 
         return $data;
     }
@@ -62,7 +65,7 @@ class StockLogService
     {
         $per_page = $request['per_page'] ?? 10;
         $data = StockLog::with(['product', 'user'])->where('product_id', $product->id)->latest()->paginate($per_page);
-        
+
         return $data->setCollection(StocklogIndexResource::collection($data->items())->collection);
     }
 }

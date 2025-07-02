@@ -58,10 +58,6 @@ class StockLogController extends Controller
 
         $data = $this->stockLogService->stockIn($request->all(), $product);
 
-        if ($data) {
-            $this->telegramService->notiStockIn($data);
-        }
-
         return response()->json([
             'success' => true,
             'message' => 'Success',
@@ -82,10 +78,6 @@ class StockLogController extends Controller
         }
 
         $data = $this->stockLogService->stockOut($request->all(), $product);
-
-        if ($data) {
-            $this->telegramService->notiStockOut($data);
-        }
 
         return response()->json([
             'success' => true,
