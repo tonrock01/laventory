@@ -1,7 +1,7 @@
 
 # Laventory
 
-Laventory is an inventory management system built with Laravel and Vite. It provides tools for managing products, categories, stock logs, users, and integrates with Telegram for notifications. The project is structured for scalability and maintainability, following Laravel best practices.
+Laventory is an inventory management system built with Laravel 12. It provides tools for managing products, categories, stock logs, users, and integrates with Telegram for notifications. The project is structured for scalability and maintainability, following Laravel best practices.
 
 ## Features
 - Product and category management
@@ -23,41 +23,44 @@ Laventory is an inventory management system built with Laravel and Vite. It prov
 ### Installation
 1. Clone the repository:
    ```sh
-   git clone <repository-url>
+   git clone https://github.com/tonrock01/laventory.git
    cd laventory
    ```
-2. Install PHP dependencies:
+2. Copy `.env.example` to `.env` and update environment variables as needed.
+3. Obtain a Telegram bot token and set `TELEGRAM_BOT_TOKEN` in your `.env` file.
+4. Install PHP dependencies:
    ```sh
    composer install
    ```
-3. Install Node.js dependencies:
+5. Install Node.js dependencies:
    ```sh
    npm install
    ```
-4. Copy the example environment file and configure:
-   ```sh
-   cp .env.example .env
-   # Edit .env as needed
-   ```
-5. Generate application key:
+6. Generate the application key:
    ```sh
    php artisan key:generate
    ```
-6. Run migrations and seeders:
+7. Run database migrations:
    ```sh
-   php artisan migrate --seed
+   php artisan migrate
    ```
-7. Build frontend assets:
+8. Generate Passport encryption keys:
    ```sh
-   npm run build
+   php artisan passport:keys
    ```
-8. Start the development server:
+9. Create a personal access client for Passport:
+   ```sh
+   php artisan passport:client --personal
+   ```
+10. Seed the database:
+   ```sh
+   php artisan db:seed CategorySeeder
+   php artisan db:seed PermissionSeeder
+   php artisan db:seed RoleSeeder
+   php artisan db:seed AdminSeeder
+   ```
+11. Start the development server and queue worker:
    ```sh
    php artisan serve
+   php artisan queue:work
    ```
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-This project is open-source and available under the [MIT license](LICENSE).
