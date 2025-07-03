@@ -64,3 +64,4 @@ Laventory is an inventory management system built with Laravel 12. It provides t
    php artisan serve
    php artisan queue:work
    ```
+12. Open your browser and navigate to [http://localhost:8000/api/docs#/](http://localhost:8000/api/docs#/) to test the API endpoints.
