@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\ActivitylogsController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RoleController;
@@ -33,7 +34,7 @@ Route::middleware('guest')->group(function () {
 Route::get('/email/verify/{id}/{hash}', [RegisterController::class, 'verify'])->middleware(['signed'])->name('verification.verify');
 
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::post('/change-password', [UserController::class, 'changePassword']);
     Route::post('/logout', [LoginController::class, 'logout']);
 
@@ -47,45 +48,75 @@ Route::middleware('auth:api')->group(function () {
         return response()->json(['message' => 'Verification link sent!']);
     })->middleware(['throttle:6,1'])->name('verification.send');
 
-    Route::get('/user', [UserController::class, 'index']);
+    Route::group(['middleware' => ['role:admin']], function () {
+        /*
+        |--------------------------------------------------------------------------
+        | Routes for user
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/user', [UserController::class, 'index']);
 
-    /*
-    |--------------------------------------------------------------------------
-    | Routes for role
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/role', [RoleController::class, 'index']);
-    Route::post('/assign-role/{userId}', [RoleController::class, 'assignRole']);
+        /*
+        |--------------------------------------------------------------------------
+        | Routes for category
+        |--------------------------------------------------------------------------
+        */
+        Route::post('/category', [CategoryController::class, 'store']);
+        Route::put('/category/{category}', [CategoryController::class, 'update']);
+        Route::delete('/category/{category}', [CategoryController::class, 'destroy']);
 
-    /*
-    |--------------------------------------------------------------------------
-    | Routes for category
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/category', [CategoryController::class, 'index']);
-    Route::post('/category', [CategoryController::class, 'store']);
-    Route::get('/category/{category}', [CategoryController::class, 'show']);
-    Route::put('/category/{category}', [CategoryController::class, 'update']);
-    Route::delete('/category/{category}', [CategoryController::class, 'destroy']);
+        /*
+        |--------------------------------------------------------------------------
+        | Routes for role
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/role', [RoleController::class, 'index']);
+        Route::post('/assign-role/{userId}', [RoleController::class, 'assignRole']);
 
-    /*
-    |--------------------------------------------------------------------------
-    | Routes for product
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/product', [ProductController::class, 'index']);
-    Route::post('/product', [ProductController::class, 'store']);
-    Route::get('/product/{product}', [ProductController::class, 'show']);
-    Route::put('/product/{product}', [ProductController::class, 'update']);
-    Route::delete('/product/{product}', [ProductController::class, 'destroy']);
+        /*
+        |--------------------------------------------------------------------------
+        | Routes for product
+        |--------------------------------------------------------------------------
+        */
+        Route::post('/product', [ProductController::class, 'store']);
+        Route::put('/product/{product}', [ProductController::class, 'update']);
+        Route::delete('/product/{product}', [ProductController::class, 'destroy']);
 
-    /*
-    |--------------------------------------------------------------------------
-    | Routes for stock_log
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/stock-log', [StockLogController::class, 'index']);
-    Route::post('/stock/in', [StockLogController::class, 'stockIn']);
-    Route::post('/stock/out', [StockLogController::class, 'stockOut']);
-    Route::get('/product/{product}/stock-log', [StockLogController::class, 'productLogs']);
+        /*
+        |--------------------------------------------------------------------------
+        | Routes for activity logs
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/activity-logs', [ActivitylogsController::class, 'index']);
+    });
+
+    Route::group(['middleware' => ['role:admin|staff']], function () {
+        /*
+        |--------------------------------------------------------------------------
+        | Routes for category
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/category', [CategoryController::class, 'index']);
+        Route::get('/category/{category}', [CategoryController::class, 'show']);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Routes for product
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/product', [ProductController::class, 'index']);
+        Route::get('/product/{product}', [ProductController::class, 'show']);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Routes for stock_log
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/stock-log', [StockLogController::class, 'index']);
+        Route::post('/stock/in', [StockLogController::class, 'stockIn']);
+        Route::post('/stock/out', [StockLogController::class, 'stockOut']);
+        Route::get('/product/{product}/stock-log', [StockLogController::class, 'productLogs']);
+    });
 });

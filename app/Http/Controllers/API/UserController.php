@@ -19,6 +19,9 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
+    /**
+     * Display a listing of the users.
+     */
     public function index(Request $request)
     {
         $data = User::paginate(10);

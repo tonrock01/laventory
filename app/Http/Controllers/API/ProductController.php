@@ -26,6 +26,8 @@ class ProductController extends Controller
      * Display a listing of the product.
      */
     #[QueryParameter('search', description: 'search by using name', type: 'string', example: "Milk")]
+    #[QueryParameter('start_date', description: 'search by date', type: 'string', example: "2025-6-25")]
+    #[QueryParameter('end_date', description: 'search by date', type: 'string', example: "2025-6-25")]
     #[QueryParameter('page', description: 'page', type: 'string', example: "2")]
     #[QueryParameter('per_page', description: 'per page', type: 'string', example: "5")]
     public function index(Request $request)
@@ -57,10 +59,12 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $data = $this->productService->show($product);
+
         return response()->json([
             'success' => true,
             'message' => 'Success',
-            'data' => $product
+            'data' => $data
         ], 200);
     }
 

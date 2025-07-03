@@ -22,6 +22,7 @@ class StocklogResource extends JsonResource
             "quantity" => $this->quantity,
             "reason" => $this->reason ? $this->reason : null,
             "created_by" => $this->created_by,
+            "created_name" => $this->when($this->user, $this->user?->first_name . " " . $this->user?->last_name),
             "updated_by" => $this->updated_by,
             "updated_at" => $this->updated_at,
             "created_at" => $this->created_at,

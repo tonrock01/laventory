@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Http\Resources\StockLogs\StocklogIndexResource;
+use App\Http\Resources\StockLogs\StocklogResource;
 use App\Jobs\StockNotification;
 use App\Models\Product;
 use App\Models\StockLog;
@@ -14,7 +14,7 @@ class StockLogService
         $per_page = $filters['per_page'] ?? 10;
         $data = StockLog::filter($filters)->with(['product', 'user'])->latest()->paginate($per_page);
 
-        return $data->setCollection(StocklogIndexResource::collection($data->items())->collection);
+        return $data->setCollection(StocklogResource::collection($data->items())->collection);
     }
 
     public function stockIn(array $request, Product $product)
@@ -66,6 +66,6 @@ class StockLogService
         $per_page = $request['per_page'] ?? 10;
         $data = StockLog::with(['product', 'user'])->where('product_id', $product->id)->latest()->paginate($per_page);
 
-        return $data->setCollection(StocklogIndexResource::collection($data->items())->collection);
+        return $data->setCollection(StocklogResource::collection($data->items())->collection);
     }
 }

@@ -40,6 +40,9 @@ class RegisterController extends Controller
         ], 201);
     }
 
+    /**
+     * Verify Email.
+     */
     public function verify(Request $request, $id, $hash)
     {
         $this->registerService->verify($request->all(), $id, $hash);

@@ -17,6 +17,9 @@ class RoleController extends Controller
         $this->roleService = $roleService;
     }
 
+    /**
+     * Display a listing of the role.
+     */
     public function index(Request $request)
     {
         $data = $this->roleService->index($request->all());
@@ -28,6 +31,9 @@ class RoleController extends Controller
         ], 200);
     }
 
+    /**
+     * Assign role to user.
+     */
     public function assignRole(AssignRoleRequest $request, User $userId)
     {
         $data = $this->roleService->assignRole($request->all(), $userId);
