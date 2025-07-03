@@ -1,6 +1,10 @@
 
 # Laventory
 
+<p align="center">
+  <img src="public/image/laventory_logo.jpg" alt="Laventory Logo" width="320"/>
+</p>
+
 Laventory is an inventory management system built with Laravel 12. It provides tools for managing products, categories, stock logs, users, and integrates with Telegram for notifications. The project is structured for scalability and maintainability, following Laravel best practices.
 
 ## Features
